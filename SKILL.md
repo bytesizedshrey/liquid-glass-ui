@@ -14,6 +14,33 @@ Use this skill to design and implement authentic liquid glass components that ph
 - You must use an SVG `feDisplacementMap` filter to drive the refraction.
 - You must filter a *copy* of the backdrop, not the live backdrop itself. Safari and Firefox do not support SVG filters inside `backdrop-filter`.
 
+## Typography
+
+Typography should be crisp, modern, and highly legible, acting as a structured anchor against the fluid nature of the glass.
+
+- **Primary Font**: Use Inter (or a similar neo-grotesque sans-serif) for all UI text and body copy.
+- **Monospace Font**: Use Geist Mono (or similar) for code snippets, technical data, or monospaced numbers.
+- **Headings**: Keep letter-spacing tight (`-0.4px` to `-0.1px`) and use medium font weights (`450` to `550`). Avoid ultra-bold weights; precision is key.
+- **Colors**:
+  - Dark text on light surfaces: High contrast `rgba(23, 23, 23, 0.92)` for headings, muted `rgba(23, 23, 23, 0.62)` for body text.
+  - Light text on dark/glass surfaces: High contrast `rgba(255, 255, 255, 0.96)`.
+
+## Density & Layout (Compact Default)
+
+The layout should balance a spacious reading experience with tightly clustered, compact UI controls.
+
+- **Content Constraints**: Keep reading columns narrow and focused (e.g., `max-width: 640px`). Use generous vertical margins between sections (`80px` to `104px`).
+- **Control Density**: UI controls (like the glass dropdown triggers) should be compact. Use padding like `10px 14px` and smaller font sizes (`14px` to `15px`).
+- **Rounding**: Use extreme rounding for floating UI elements. Buttons and floating glass panels should use pill shapes (`border-radius: 9999px` or `999px`) or large, smooth squircles (e.g., `32px` radius for large content panels).
+
+## Color Palette
+
+The interface relies on extreme contrast between the dark environmental background and the crisp foreground elements.
+
+- **Environment/Backdrop**: Very dark, deep tones (`#0b0e13`). This allows the glass refraction to pick up rich, dark colors and bright specular highlights.
+- **Foreground Content Panels**: Pure white (`#ffffff`) or highly opaque light panels that contrast sharply with the dark environment.
+- **Glass Shell**: The glass itself should have a very subtle, translucent dark fill (e.g., `rgba(0,0,0,0.22)`) with a white rim light to define the edge.
+
 ## Core Technical Architecture
 
 ### 1) The Displacement Map
@@ -44,7 +71,9 @@ Create a two-part system to handle the cross-browser refraction without relying 
 - Safari caches a filter's output by its `id`. If your lens animates, generate a fresh `id` on every rebuild so it doesn't freeze on the first frame.
 - Safari caps the size of the source graphic a filter will process. Clip the refraction copy to the lens box before it rasterizes, otherwise the filter produces nothing.
 
-### 4) Accessibility & Interaction Rules
-- The UI beneath the glass (the real backdrop) must remain fully interactive. The glass is just a visual overlay bending a copy.
-- **Motion:** Respect `prefers-reduced-motion` by cutting to new positions instead of springing.
-- **Transparency:** Respect `prefers-reduced-transparency` by dropping the refraction entirely and falling back to an opaque panel for maximum readability.
+## Accessibility & Interaction Rules
+
+- **Interactive Base**: The UI beneath the glass (the real backdrop) must remain fully interactive. The glass is just a visual overlay bending a copy.
+- **Shared Lens Animation**: If multiple items trigger the glass (like a navigation menu), use a *single* glass lens that travels and morphs between items, rather than fading individual panels in and out. The motion should be spring-driven but interruptible.
+- **Motion**: Respect `prefers-reduced-motion` by cutting to new positions instead of springing.
+- **Transparency**: Respect `prefers-reduced-transparency` by dropping the refraction entirely and falling back to an opaque panel for maximum readability.
