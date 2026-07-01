@@ -67,7 +67,13 @@ Create a two-part system to handle the cross-browser refraction without relying 
 </GlassScene>
 ```
 
-### 3) Safari Concessions
+### 3) Nested Inset + Popping Button Pattern (Learned Rule)
+When building tactile controls (like toggles, sliders, or segmented controls) with liquid glass, use this specific layering pattern:
+1. **The Inset Well**: Create a recessed track or well on the underlying panel using dark inset shadows (e.g., `box-shadow: inset 0 2px 6px rgba(0,0,0,0.4)`). The well itself is NOT the glass; it is the physical trench that houses it.
+2. **The Popping Glass Button**: The interactive object (the thumb of a slider, or the active pill of a toggle) is the refractive liquid glass `GlassLens`. It sits *inside* the well but appears raised due to the heavy refraction at its steep curved rim and a subtle drop shadow (`box-shadow: 0 4px 12px rgba(0,0,0,0.2)`).
+3. **The Interaction**: As the glass button moves within the well, it actively bends the inset shadows and the backdrop beneath it, creating a highly physical, tactile sliding sensation.
+
+### 4) Safari Concessions
 - Safari caches a filter's output by its `id`. If your lens animates, generate a fresh `id` on every rebuild so it doesn't freeze on the first frame.
 - Safari caps the size of the source graphic a filter will process. Clip the refraction copy to the lens box before it rasterizes, otherwise the filter produces nothing.
 
